@@ -9,7 +9,7 @@ deck = CARD_SUIT.product(CARD_VALUE)
 
 dealer_cards = []
 player_cards = []
-player_total = []
+player_total = {}
 dealer_total = []
 
 def deal_cards(d_card, p_card, deck)
@@ -26,25 +26,33 @@ def display_table_information(d_card, p_card)
   puts "Your cards are #{p_card[0]} and #{p_card[1]}"
 end
 
-def calculate_card_total(cards, total)
+def calculate_card_total(cards)
+  
+  total = {}
   cards.each do |card|
-    total.push(card[1])
+      total[card[0] + " " + card[1]] = card[1]
   end
 
   tens = ["J","Q","K","A"]
   
-  total.each_with_index do |value, index|
+  total.each do |key, value|
     tens.each do |ten|
       if ten == value
-          total[index] = "10"
+          total[key] = "10"
       end
     end
   end
 
-  total = total.map!(&:to_i).inject(:+) 
+  total = total.values.map!(&:to_i).inject(:+) 
 end
 
-def hit_or_stand?
+def hit(cards, deck)
+  cards.push(deck.pop) 
+end
+
+def hit_or_stand?(cards, deck)
+ 
+  loop do 
   puts "Would you like to hit or stand?(y/n)"
   
   begin
@@ -53,23 +61,24 @@ def hit_or_stand?
       puts "Please input [y] for hit and [n] for stand." 
     end 
   end until answer == "y" || answer == "n"
-
-  if answer == "y"
-    true
-  end
-end
-
-def hit(cards, deck)
-  loop do
-    if hit_or_stand?  
-      cards.push(deck.pop)
-    else
-      break
+  
+    if answer == "y"
+      hit(cards, deck)
+    else break
     end
+
     puts "Your got a #{cards.last}"
     puts "You have #{cards}"
   end
+  
+  puts "You have #{cards}"
 end
+
+# def check_busted(cards, total)
+#   if total 
+# end
+
+
 
 
 
@@ -77,12 +86,14 @@ end
 
 deal_cards(dealer_cards, player_cards, deck)
 display_table_information(dealer_cards, player_cards)
-# calculate_card_total(player_cards, player_total)
-hit(player_cards,deck)
-display_table_information(dealer_cards, player_cards)
+hit_or_stand?(player_cards, deck)
+total = calculate_card_total(player_cards)
+p total
+
+# display_table_information(dealer_cards, player_cards)
 
 
-p player_cards
+# p player_cards
 
 
 
