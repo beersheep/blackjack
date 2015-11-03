@@ -9,8 +9,6 @@ deck = CARD_SUIT.product(CARD_VALUE)
 
 dealer_cards = []
 player_cards = []
-player_total = {}
-dealer_total = []
 
 def deal_cards(d_card, p_card, deck)
   deck.shuffle!
@@ -27,23 +25,25 @@ def display_table_information(d_card, p_card)
 end
 
 def calculate_card_total(cards)
-  
-  total = {}
-  cards.each do |card|
-      total[card[0] + " " + card[1]] = card[1]
-  end
 
-  tens = ["J","Q","K","A"]
-  
-  total.each do |key, value|
-    tens.each do |ten|
-      if ten == value
-          total[key] = "10"
-      end
+  card_value = cards.map{|card| card[1]}
+  total = 0
+
+  card_value.each do |value|
+    if value == "A"
+      total += 11
+    elsif value.to_i == 0
+      total += 10
+    else
+      total += value.to_i
     end
   end
 
-  total = total.values.map!(&:to_i).inject(:+) 
+  card_value.select {|value| value == "A"}.count.times do
+      total -= 10 if total > 21
+  end
+
+  total
 end
 
 def hit(cards, deck)
@@ -64,38 +64,59 @@ def hit_or_stand?(cards, deck)
   
     if answer == "y"
       hit(cards, deck)
+      puts "Your got a #{cards.last}"
+      puts "You have #{cards}"
+      calculate_card_total(cards)
     else break
     end
 
-    puts "Your got a #{cards.last}"
-    puts "You have #{cards}"
   end
   
   puts "You have #{cards}"
 end
 
-# def check_busted(cards, total)
-#   if total 
-# end
-
-
-
-
-
-
+def check_busted(cards, total)
+  
+  puts "You are busted" if total > 21
+  exit
+  
+end
 
 deal_cards(dealer_cards, player_cards, deck)
 display_table_information(dealer_cards, player_cards)
 hit_or_stand?(player_cards, deck)
-total = calculate_card_total(player_cards)
-p total
+player_total = calculate_card_total(player_cards)
+
+
+
+# p player_cards
+# binding.pry
+
+
+# tens = ["J","Q","K","A"]
+# player_cards.each do |card|
+#   tens.each do |ten|
+#     if card.include?(ten)
+#       p "matches"
+#     end
+#   end
+# end
+
 
 # display_table_information(dealer_cards, player_cards)
 
 
 # p player_cards
 
-
+# To see if J, Q, K, A included
+# tens = ["J","Q","K","A"]
+# player_cards.each do |card|
+#   tens.each do |ten|
+#     if card.include?(ten)
+#       p "matches"
+#     end
+#   end
+# end
 
 
 
