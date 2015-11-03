@@ -125,16 +125,14 @@ def dealer_turn(cards, deck, p_total)
     hit(cards, deck)
     puts "Dealer gets a #{cards.last}"
     puts "Dealer has #{cards}"
-    calculate_card_total(cards)
     if blackjack?(cards)
       puts "Dealer hits blackjack! You lose!"
       exit
     elsif busted?(cards)
       puts "Dealer Busted! You Win!"
       exit
-    else
-      break
     end
+    total = calculate_card_total(cards)  
   end 
   puts "Dealer stands"
   calculate_card_total(cards)
