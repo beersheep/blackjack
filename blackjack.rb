@@ -5,8 +5,6 @@ CARD_VALUE = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
 
 deck = CARD_SUIT.product(CARD_VALUE)
 
-# Deal Card
-
 dealer_cards = []
 player_cards = []
 
@@ -96,7 +94,6 @@ def player_turn(cards, deck)
       hit(cards, deck)
       puts "Your got a #{cards.last}"
       puts "You have #{cards}"
-      # total = calculate_card_total(cards)
       if busted?(cards)
         puts "Busted! You lose!"
         exit
@@ -106,7 +103,6 @@ def player_turn(cards, deck)
       end
     else 
       system "clear"
-      # calculate_card_total(cards)
       if blackjack?(cards)
         puts "Blackjack! You win!"
         exit 
