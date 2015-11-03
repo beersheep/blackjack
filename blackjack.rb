@@ -26,8 +26,17 @@ def display_table_information(d_card, p_card)
 end
 
 def display_result(d_card, d_total, p_card, p_total)
-  puts "Your hand are #{p_card}, for a total of #{p_total}"
-  puts "Dealer's hand are #{d_card}, for a total of #{d_total}"
+  puts "Your hand are "
+  p_card.each do |card|
+    puts "#{card}"
+  end
+  puts "for a total #{p_total}"
+
+  puts "Dealer's hand are "
+  d_card.each do |card|
+    puts "#{card}"
+  end
+  puts "for a total #{d_total}"
 
   if p_total > d_total
     puts "You win!"
@@ -56,7 +65,6 @@ def calculate_card_total(cards)
   card_value.select {|value| value == "A"}.count.times do
       total -= 10 if total > 21
   end
-  check_busted(total)
   total
 end
 
@@ -80,88 +88,62 @@ def hit_or_stand?(cards, deck)
       hit(cards, deck)
       puts "Your got a #{cards.last}"
       puts "You have #{cards}"
-      calculate_card_total(cards)
-
+      total = calculate_card_total(cards)
+      if total > 21
+        puts "Busted! You lose!"
+        exit
+      elsif total == 21
+        puts "Blackjack! You win!"
+        exit
+      end
     else 
       system "clear"
       calculate_card_total(cards)
+      if calculate_card_total(cards) == 21
+        puts "Blackjack! You win!"
+        exit 
+    end
       break
     end
   end
 end
 
-def check_busted(total)
-  if total > 21
-  puts "Over 21, busted!"
-  exit
-  end
-end
-
-def dealer_turn(cards, deck)
+def dealer_turn(cards, deck, p_total)
 
   sleep 0.5
   puts "dealer's hand are #{cards}"
 
   total = calculate_card_total(cards)
-    
-  loop do 
-    if total < 17
+     
+  while total < 17 || total < p_total
       puts "Dealer hits a card!"
       sleep 0.3
       hit(cards, deck)
       puts "Dealer gets a #{cards.last}"
       puts "Dealer has #{cards}"
       calculate_card_total(cards)
+    if calculate_card_total(cards) == 21
+        puts "Dealer hits blackjack! You lose!"
+        exit
+    elsif calculate_card_total(cards) > 21
+        puts "Dealer Busted! You Win!"
+        exit
+    else
+      break
     end
-  end until total > 17
+  end 
     puts "Dealer stands"
-   
     calculate_card_total(cards)
-    if total > 21 
-      puts "You Win!"
-    end
 end
 
 deal_cards(dealer_cards, player_cards, deck)
 display_table_information(dealer_cards, player_cards)
 hit_or_stand?(player_cards, deck)
 player_total = calculate_card_total(player_cards)
-dealer_turn(dealer_cards, deck)
+dealer_turn(dealer_cards, deck, player_total)
 dealer_total = calculate_card_total(dealer_cards)
 display_result(dealer_cards, dealer_total, player_cards, player_total)
 # binding.pry
-
-
-
-
-# p player_cards
-# binding.pry
-
-
-# tens = ["J","Q","K","A"]
-# player_cards.each do |card|
-#   tens.each do |ten|
-#     if card.include?(ten)
-#       p "matches"
-#     end
-#   end
-# end
-
-
-# display_table_information(dealer_cards, player_cards)
-
-
-# p player_cards
-
-# To see if J, Q, K, A included
-# tens = ["J","Q","K","A"]
-# player_cards.each do |card|
-#   tens.each do |ten|
-#     if card.include?(ten)
-#       p "matches"
-#     end
-#   end
-# end
 
 
 
