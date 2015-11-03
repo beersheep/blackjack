@@ -14,9 +14,9 @@ player_cards = []
 def deal_cards(d_card, p_card, deck)
   deck.shuffle!
   loop do
-  p_card.push(deck.pop)
-  d_card.push(deck.pop)
-  break if p_card.size == 2 && d_card.size == 2
+    p_card.push(deck.pop)
+    d_card.push(deck.pop)
+    break if p_card.size == 2 && d_card.size == 2
   end
 end
 
@@ -36,6 +36,7 @@ def display_result(d_card, d_total, p_card, p_total)
   d_card.each do |card|
     puts "#{card}"
   end
+
   puts "for a total #{d_total}"
 
   if p_total > d_total
@@ -77,12 +78,12 @@ def player_turn(cards, deck)
   loop do 
   puts "Would you like to hit or stand?(y/n)"
   
-  begin
-    answer = gets.chomp.downcase
-    unless answer == "y" || answer == "n"
-      puts "Please input [y] for hit and [n] for stand." 
-    end 
-  end until answer == "y" || answer == "n"
+    begin
+      answer = gets.chomp.downcase
+      unless answer == "y" || answer == "n"
+        puts "Please input [y] for hit and [n] for stand." 
+      end 
+    end until answer == "y" || answer == "n"
   
     if answer == "y"
       hit(cards, deck)
@@ -116,24 +117,24 @@ def dealer_turn(cards, deck, p_total)
   total = calculate_card_total(cards)
      
   while total < 17 || total < p_total
-      puts "Dealer hits a card!"
-      sleep 0.3
-      hit(cards, deck)
-      puts "Dealer gets a #{cards.last}"
-      puts "Dealer has #{cards}"
-      calculate_card_total(cards)
+    puts "Dealer hits a card!"
+    sleep 0.3
+    hit(cards, deck)
+    puts "Dealer gets a #{cards.last}"
+    puts "Dealer has #{cards}"
+    calculate_card_total(cards)
     if calculate_card_total(cards) == 21
-        puts "Dealer hits blackjack! You lose!"
-        exit
+      puts "Dealer hits blackjack! You lose!"
+      exit
     elsif calculate_card_total(cards) > 21
-        puts "Dealer Busted! You Win!"
-        exit
+      puts "Dealer Busted! You Win!"
+      exit
     else
       break
     end
   end 
-    puts "Dealer stands"
-    calculate_card_total(cards)
+  puts "Dealer stands"
+  calculate_card_total(cards)
 end
 
 deal_cards(dealer_cards, player_cards, deck)
