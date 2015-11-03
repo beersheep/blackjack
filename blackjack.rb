@@ -72,7 +72,7 @@ def hit(cards, deck)
   cards.push(deck.pop) 
 end
 
-def hit_or_stand?(cards, deck)
+def player_turn(cards, deck)
  
   loop do 
   puts "Would you like to hit or stand?(y/n)"
@@ -138,7 +138,7 @@ end
 
 deal_cards(dealer_cards, player_cards, deck)
 display_table_information(dealer_cards, player_cards)
-hit_or_stand?(player_cards, deck)
+player_turn(player_cards, deck)
 player_total = calculate_card_total(player_cards)
 dealer_turn(dealer_cards, deck, player_total)
 dealer_total = calculate_card_total(dealer_cards)
