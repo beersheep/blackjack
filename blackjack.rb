@@ -10,6 +10,13 @@ deck = CARD_SUIT.product(CARD_VALUE)
 dealer_cards = []
 player_cards = []
 
+def blackjack?(cards)
+  calculate_card_total(cards) == 21 ? true : false
+end
+
+def busted?(cards)
+  calculate_card_total(cards) > 21 ? true : false
+end
 
 def deal_cards(d_card, p_card, deck)
   deck.shuffle!
@@ -26,13 +33,13 @@ def display_table_information(d_card, p_card)
 end
 
 def display_result(d_card, d_total, p_card, p_total)
-  puts "Your hand are "
+  puts "=> Your hand are "
   p_card.each do |card|
     puts "#{card}"
   end
   puts "for a total #{p_total}"
 
-  puts "Dealer's hand are "
+  puts "=> Dealer's hand are "
   d_card.each do |card|
     puts "#{card}"
   end
@@ -89,18 +96,18 @@ def player_turn(cards, deck)
       hit(cards, deck)
       puts "Your got a #{cards.last}"
       puts "You have #{cards}"
-      total = calculate_card_total(cards)
-      if total > 21
+      # total = calculate_card_total(cards)
+      if busted?(cards)
         puts "Busted! You lose!"
         exit
-      elsif total == 21
+      elsif blackjack?(cards)
         puts "Blackjack! You win!"
         exit
       end
     else 
       system "clear"
-      calculate_card_total(cards)
-      if calculate_card_total(cards) == 21
+      # calculate_card_total(cards)
+      if blackjack?(cards)
         puts "Blackjack! You win!"
         exit 
     end
@@ -123,10 +130,10 @@ def dealer_turn(cards, deck, p_total)
     puts "Dealer gets a #{cards.last}"
     puts "Dealer has #{cards}"
     calculate_card_total(cards)
-    if calculate_card_total(cards) == 21
+    if blackjack?(cards)
       puts "Dealer hits blackjack! You lose!"
       exit
-    elsif calculate_card_total(cards) > 21
+    elsif busted?(cards)
       puts "Dealer Busted! You Win!"
       exit
     else
